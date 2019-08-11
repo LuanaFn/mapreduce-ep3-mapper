@@ -28,11 +28,13 @@ public class TCPServer {
 		System.out.println("\r\nNew connection from " + clientAddress);
 
 		BufferedReader in = new BufferedReader(new InputStreamReader(client.getInputStream()));
+		StringBuilder builder = new StringBuilder();
 		while ((data = in.readLine()) != null) {
 			System.out.println("\r\nMessage from " + clientAddress + ": " + data);
 			
-			mapperbo.recebeUrls(data);
+			builder.append(data);
 		}
+		mapperbo.recebeUrls(builder.toString());
 	}
 
 	public InetAddress getSocketAddress() {
