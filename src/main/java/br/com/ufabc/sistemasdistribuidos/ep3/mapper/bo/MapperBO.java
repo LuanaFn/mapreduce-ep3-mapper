@@ -5,8 +5,11 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import br.com.ufabc.sistemasdistribuidos.ep3.mapper.service.HTMLLinkExtractor;
 import br.com.ufabc.sistemasdistribuidos.ep3.mapper.service.URLReader;
+import br.com.ufabc.sistemasdistribuidos.ep3.mapper.tcp.TCPClient;
 
 public class MapperBO {
 	public MapperBO() {
@@ -20,7 +23,7 @@ public class MapperBO {
 		for(int i=0; i< urls.size(); i++) {
 			try {
 				HTMLLinkExtractor extractor = new HTMLLinkExtractor();
-				List<String> links = extractor.grabHTMLLinks(urls.get(i));
+				List<String> links = extractor.grabHTMLLinks(URLReader.read(urls.get(i)));
 				
 				linksMap.put(urls.get(i), links);
 				
@@ -29,6 +32,19 @@ public class MapperBO {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+		}
+		
+		// tenta repassar a informação pro reducer
+		try {
+			TCPClient client = new TCPClient(null, 8082);
+			
+			ObjectMapper mapper = new ObjectMapper(); 
+			client.enviaMensagem(mapper.writeValueAsString(linksMap));
+			client.close();
+			
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 }
