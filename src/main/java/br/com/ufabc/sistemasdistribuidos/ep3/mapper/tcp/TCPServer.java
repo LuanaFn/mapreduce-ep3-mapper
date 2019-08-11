@@ -5,12 +5,16 @@ import java.io.InputStreamReader;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.Scanner;
+
+import br.com.ufabc.sistemasdistribuidos.ep3.mapper.bo.MapperBO;
 
 public class TCPServer {
 	private ServerSocket server;
+	private MapperBO mapperbo;
 
 	public TCPServer(String ipAddress) throws Exception {
+		mapperbo = new MapperBO();
+		
 		if (ipAddress != null && !ipAddress.isEmpty())
 			this.server = new ServerSocket(8081, 1, InetAddress.getByName(ipAddress));
 		else
@@ -26,7 +30,8 @@ public class TCPServer {
 		BufferedReader in = new BufferedReader(new InputStreamReader(client.getInputStream()));
 		while ((data = in.readLine()) != null) {
 			System.out.println("\r\nMessage from " + clientAddress + ": " + data);
-
+			
+			mapperbo.recebeUrls(data);
 		}
 	}
 
