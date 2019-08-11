@@ -60,3 +60,5 @@ Note que o www.site4.br não foi baixado por nenhum mapper, porém apareceu na lis
 
 ## Referências
 - [Conexão cliente-servidor por TCP](https://www.pegaxchange.com/2017/12/07/simple-tcp-ip-server-client-java/)
+- [Leitura de html das URLs](https://docs.oracle.com/javase/tutorial/networking/urls/readingURL.html)
+- [Listar links de um HTML](https://www.mkyong.com/regular-expressions/how-to-extract-html-links-with-regular-expression/)
