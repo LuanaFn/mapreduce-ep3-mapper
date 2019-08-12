@@ -14,7 +14,7 @@ public class TCPServer {
 
 	public TCPServer(String ipAddress) throws Exception {
 		mapperbo = new MapperBO();
-		
+
 		if (ipAddress != null && !ipAddress.isEmpty())
 			this.server = new ServerSocket(8081, 1, InetAddress.getByName(ipAddress));
 		else
@@ -31,7 +31,7 @@ public class TCPServer {
 		StringBuilder builder = new StringBuilder();
 		while ((data = in.readLine()) != null) {
 			System.out.println("\r\nMessage from " + clientAddress + ": " + data);
-			
+
 			builder.append(data);
 		}
 		mapperbo.recebeUrls(builder.toString());
@@ -57,6 +57,7 @@ public class TCPServer {
 		System.out.println(
 				"\r\nRunning Server: " + "Host=" + app.getSocketAddress().getHostAddress() + " Port=" + app.getPort());
 
-		app.listen();
+		while (true)
+			app.listen();
 	}
 }
