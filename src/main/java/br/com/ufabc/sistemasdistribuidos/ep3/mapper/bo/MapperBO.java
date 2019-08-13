@@ -5,43 +5,64 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import br.com.ufabc.sistemasdistribuidos.ep3.mapper.dto.DtoCoordenador;
+import br.com.ufabc.sistemasdistribuidos.ep3.mapper.dto.DtoReducer;
 import br.com.ufabc.sistemasdistribuidos.ep3.mapper.service.HTMLLinkExtractor;
 import br.com.ufabc.sistemasdistribuidos.ep3.mapper.service.URLReader;
 import br.com.ufabc.sistemasdistribuidos.ep3.mapper.tcp.TCPClient;
 
 public class MapperBO {
 	public MapperBO() {
-		
+
 	}
-	
+
 	public void recebeUrls(String lista) {
+
+		// traduz o dto que o coordenador mandou
+		DtoCoordenador dtoCoord = new DtoCoordenador();
+
+		ObjectMapper mapper = new ObjectMapper();
+		try {
+			dtoCoord = mapper.readValue(lista, DtoCoordenador.class);
+			lista = dtoCoord.getUrls();
+
+		} catch (JsonProcessingException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+
 		List<String> urls = new ArrayList<String>(Arrays.asList(lista.split(",")));
 		HashMap<String, List<String>> linksMap = new HashMap<String, List<String>>();
-		
-		for(int i=0; i< urls.size(); i++) {
+
+		for (int i = 0; i < urls.size(); i++) {
 			try {
 				HTMLLinkExtractor extractor = new HTMLLinkExtractor();
 				List<String> links = extractor.grabHTMLLinks(URLReader.read(urls.get(i)));
-				
+
 				linksMap.put(urls.get(i), links);
-				
-				System.out.println("Conteúdo processado da url "+urls.get(i));
+
+				System.out.println("Conteúdo processado da url " + urls.get(i));
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
-		
+
 		// tenta repassar a informação pro reducer
 		try {
+			DtoReducer dtoReducer = new DtoReducer();
+			dtoReducer.setHost(dtoCoord.getHost());
+			dtoReducer.setPort(dtoCoord.getPort());
+			dtoReducer.setLinksMap(linksMap);
+			
 			TCPClient client = new TCPClient(null, 8082);
-			
-			ObjectMapper mapper = new ObjectMapper(); 
-			client.enviaMensagem(mapper.writeValueAsString(linksMap));
+
+			client.enviaMensagem(mapper.writeValueAsString(dtoReducer));
 			client.close();
-			
+
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
