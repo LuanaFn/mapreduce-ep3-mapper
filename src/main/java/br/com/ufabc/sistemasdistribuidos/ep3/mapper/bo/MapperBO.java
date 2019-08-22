@@ -44,21 +44,21 @@ public class MapperBO {
 
 				linksMap.put(urls.get(i), links);
 
-				System.out.println("Conteúdo processado da url " + urls.get(i));
+				System.out.println("Conteï¿½do processado da url " + urls.get(i));
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
 
-		// tenta repassar a informação pro reducer
+		// tenta repassar a informaï¿½ï¿½o pro reducer
 		try {
 			DtoReducer dtoReducer = new DtoReducer();
 			dtoReducer.setHost(dtoCoord.getHost());
 			dtoReducer.setPort(dtoCoord.getPort());
 			dtoReducer.setLinksMap(linksMap);
 			
-			TCPClient client = new TCPClient(null, 8082);
+			TCPClient client = new TCPClient("http://ec2-34-229-109-240.compute-1.amazonaws.com/", 8082);
 
 			client.enviaMensagem(mapper.writeValueAsString(dtoReducer));
 			client.close();

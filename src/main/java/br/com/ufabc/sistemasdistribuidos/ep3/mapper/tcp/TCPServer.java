@@ -50,7 +50,8 @@ public class TCPServer {
 		TCPServer app;
 
 		if (args.length > 0)
-			app = new TCPServer(args[0]);
+			//ip 
+			app = new TCPServer("ec2-34-230-52-12.compute-1.amazonaws.com");
 		else
 			app = new TCPServer(null);
 
