@@ -49,11 +49,11 @@ public class TCPServer {
 		System.out.println("MAPPER");
 		TCPServer app;
 
-		if (args.length > 0)
+//		if (args.length > 0)
 			//ip 
 			app = new TCPServer("ec2-34-230-52-12.compute-1.amazonaws.com");
-		else
-			app = new TCPServer(null);
+//		else
+//			app = new TCPServer(null);
 
 		System.out.println(
 				"\r\nRunning Server: " + "Host=" + app.getSocketAddress().getHostAddress() + " Port=" + app.getPort());
